@@ -16,7 +16,7 @@ int mult(int n1, int n2, int mod)
     return res;
 }
 
-int power(int n, int p, int mod)
+int powerMod(int n, int p, int mod)
 {
     int res = 1;
 
