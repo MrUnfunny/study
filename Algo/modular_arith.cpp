@@ -25,9 +25,9 @@ int powerMod(int n, int p, int mod)
         if (p % 2 == 1)
         {
             res = mult(res, n, mod);
-            n = mult(n, n, mod);
-            p /= 2;
         }
+        n = mult(n, n, mod);
+        p /= 2;
     }
     return res;
 }

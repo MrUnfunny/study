@@ -1,31 +1,34 @@
 #include "modular_arith.cpp"
 
+#include <bits/stdc++.h>
 #include <string>
 
-const int m = 31;
-const int p = 10e9 + 9;
+using namespace std;
 
-//To be changed as per input
-const int n = 100;
+//p because it's often prime
+const int p = 31;
 
-int power[n];
-int inverse[n];
-int hashes[n];
+// m because it's used as modulus
+const int m = 10e9 + 9;
 
-void preCompute()
+vector<int> power;
+vector<int> inverse;
+vector<int> hashes;
+
+void preCompute(int n)
 {
-    power[0] = 1;
+    power.push_back(1);
 
     for (int i = 1; i < n; ++i)
     {
-        power[i] = mult(power[i - 1], m, p);
+        power.push_back(mult(power[i - 1], p, m));
     }
 
-    int inv = powerMod(m, p - 2, p);
-    inverse[0] = 1;
+    int inv = powerMod(p, m - 2, m);
+    inverse.push_back(1);
     for (int i = 1; i < n; ++i)
     {
-        inverse[i] = mult(inverse[i - 1], inv, p);
+        inverse.push_back(mult(inverse[i - 1], inv, m));
     }
 }
 
@@ -35,13 +38,13 @@ void buildHashes(std::string s)
 
     for (int i = 0; i < n; i++)
     {
-        hashes[i] = add(i == 0 ? 0 : hashes[i - 1], mult(power[i], s[i] - 'a' + 1, p), p);
+        hashes.push_back(add(i == 0 ? 0 : hashes[i - 1], mult(power[i], s[i] - 'a' + 1, m), m));
     }
 }
 
 int getHash(int start, int end)
 {
-    int res = add(hashes[end], start < 2 ? 0 : -hashes[start - 1], p);
-    res = mult(res, start == 0 ? 1 : inverse[start - 1], p);
+    int res = add(hashes[end], start < 2 ? 0 : -hashes[start - 1], m);
+    res = mult(res, start == 0 ? 1 : inverse[start - 1], m);
     return res;
 }
